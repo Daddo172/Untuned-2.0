@@ -1,4 +1,4 @@
-<?php  //[STAMP] d26d4f451406fc9c21fdbe923ce4fb7f
+<?php  //[STAMP] 5a6ed43c9524fca4eb151ec3d86111ff
 // phpcs:ignoreFile
 namespace _generated;
 
@@ -2253,7 +2253,7 @@ trait AcceptanceTesterActions
      * @param string $password
      * @see \Helper\Acceptance::amLoggedInAs()
      */
-    public function amLoggedInAs($email, $password = "password123") {
+    public function amLoggedInAs($user) {
         return $this->getScenario()->runStep(new \Codeception\Step\Condition('amLoggedInAs', func_get_args()));
     }
 }

@@ -1,15 +1,22 @@
+namespace: Helper
 paths:
-    tests: tests                # Percorso della cartella dei test
-    output: tests/_output       # Cartella per report e log
-    data: tests/_data           # Dati di test
-    support: tests/_support     # File di supporto
-    envs: tests/_envs           # Configurazioni per ambiente
+    tests: tests
+    output: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
 
 suites:
     acceptance:
         actor: AcceptanceTester
+        path: tests/acceptance
         modules:
             enabled:
                 - PhpBrowser:
-                    url: "http://localhost/untuned-2.0"
-                - \Helper\Acceptance
+                    url: "http://127.0.0.1:8000"  # Scegli UN solo URL e mantieni la coerenza
+                - Helper\Acceptance  # Senza backslash iniziale
+
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M

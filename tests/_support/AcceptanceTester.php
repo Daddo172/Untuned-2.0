@@ -1,6 +1,11 @@
 <?php
 
-declare(strict_types=1);
+namespace Helper;
+
+class AcceptanceTester extends \Codeception\Actor
+{
+    use _generated\AcceptanceTesterActions;
+}
 
 
 /**
@@ -18,11 +23,3 @@ declare(strict_types=1);
  *
  * @SuppressWarnings(PHPMD)
 */
-class AcceptanceTester extends \Codeception\Actor
-{
-    use _generated\AcceptanceTesterActions;
-
-    /**
-     * Define custom actions here
-     */
-}
