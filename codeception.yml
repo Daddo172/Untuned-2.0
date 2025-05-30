@@ -1,0 +1,15 @@
+paths:
+    tests: tests                # Percorso della cartella dei test
+    output: tests/_output       # Cartella per report e log
+    data: tests/_data           # Dati di test
+    support: tests/_support     # File di supporto
+    envs: tests/_envs           # Configurazioni per ambiente
+
+suites:
+    acceptance:
+        actor: AcceptanceTester
+        modules:
+            enabled:
+                - PhpBrowser:
+                    url: "http://localhost/untuned-2.0"
+                - \Helper\Acceptance
