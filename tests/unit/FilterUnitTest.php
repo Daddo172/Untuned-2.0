@@ -16,6 +16,6 @@ class FilterUnitTest extends TestCase
 
         $filtered = filterPostsByGenre($posts, 'Pop');
         $this->assertCount(1, $filtered);
-        $this->assertEquals('Song 1w', array_values($filtered)[0]['titolo']);
+        $this->assertEquals('Song 1', array_values($filtered)[0]['titolo']);
     }
 }
