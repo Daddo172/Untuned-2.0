@@ -1,4 +1,9 @@
-namespace: Helper
+actor: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://localhost/Untuned-2.0-main
+        # - \Helper\Acceptance  ← RIMUOVI O COMMENTA questa riga
 paths:
     tests: tests
     output: tests/_output
@@ -6,15 +11,7 @@ paths:
     support: tests/_support
     envs: tests/_envs
 
-suites:
-    acceptance:
-        actor: AcceptanceTester
-        path: acceptance
-        bootstrap: _bootstrap.php
-        modules:
-            enabled:
-                - PhpBrowser:
-                    url: "http://localhost:3000/"  # Scegli UN solo URL e mantieni la coerenza
-                - Helper\Acceptance  # Senza backslash iniziale
-settings:
-    bootstrap: false
+actor_suffix: Tester
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
