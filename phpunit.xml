@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         verbose="true"
+         stopOnFailure="false">
+    
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/unit</directory>
@@ -7,6 +12,7 @@
             <directory>tests/integration</directory>
         </testsuite>
     </testsuites>
+
     <php>
         <server name="DB_HOST" value="localhost"/>
         <server name="DB_NAME" value="untuned_test"/>

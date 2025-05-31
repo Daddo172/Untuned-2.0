@@ -1,0 +1,1 @@
+{"version":1,"defects":{"FilterLogicTest::testFilterReturnsOnlyPopPosts":8},"times":{"FilterUnitTest::testFilterByGenre":0.007,"FilterLogicTest::testFilterReturnsOnlyPopPosts":0.043}}
