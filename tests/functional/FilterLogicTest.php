@@ -18,7 +18,7 @@ class FilterLogicTest extends TestCase
         // Inserisce 1 post Pop e 1 Rock
         $stmt = $this->pdo->prepare("INSERT INTO post (titolo, contenuto, genere, email) VALUES (?, ?, ?, ?)");
         $stmt->execute(['Test Pop', 'Contenuto Pop', 'Pop', 'pop@example.com']);
-        $stmt->execute(['Test Rock', 'Contenuto Rock', 'Rock', 'rock@example.com']);
+        $stmt->execute(params: ['Test Rock', 'Contenuto Rock', 'Rock', 'rock@example.com']);
     }
 
     public function testFilterReturnsOnlyPopPosts(): void
