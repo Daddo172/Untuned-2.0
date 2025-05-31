@@ -1,4 +1,6 @@
 <?php
+// Test unitario che verifica la corretta funzionalità della funzione di filtro
+// dato un array di post, filtra per genere 'Pop' e controlla che il risultato sia corretto.
 
 use PHPUnit\Framework\TestCase;
 require_once dirname(__DIR__, 2) . '/_inc/filter_functions.php';

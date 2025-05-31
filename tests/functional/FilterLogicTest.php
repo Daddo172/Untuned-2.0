@@ -1,4 +1,7 @@
 <?php
+// Test di integrazione che verifica il funzionamento del filtro per genere musicale
+// Inserisce dati di test nel database, simula la richiesta del filtro 'Pop', include la pagina index.php
+// e controlla che l'output HTML contenga solo post con genere 'Pop'.
 
 use PHPUnit\Framework\TestCase;
 

@@ -1,4 +1,7 @@
 <?php
+// Test di integrazione per la pagina profilo utente
+// Simula una sessione con dati utente e un token Spotify fake, include la pagina profilo.php
+// e verifica che nell'output siano presenti le informazioni dell'utente simulate.
 use PHPUnit\Framework\TestCase;
 
 class FakeCurlServer {
