@@ -1,1 +1,1 @@
-{"version":1,"defects":{"FilterLogicTest::testFilterReturnsOnlyPopPosts":8,"ProfiloPageTest::testProfiloPageShowsUserInfo":5},"times":{"FilterUnitTest::testFilterByGenre":0.005,"FilterLogicTest::testFilterReturnsOnlyPopPosts":0.044,"ProfiloPageTest::testProfiloPageShowsUserInfo":0.048}}
+{"version":1,"defects":{"FilterLogicTest::testFilterReturnsOnlyPopPosts":8,"ProfiloPageTest::testProfiloPageShowsUserInfo":5},"times":{"FilterUnitTest::testFilterByGenre":0.005,"FilterLogicTest::testFilterReturnsOnlyPopPosts":0.044,"ProfiloPageTest::testProfiloPageShowsUserInfo":0.053}}

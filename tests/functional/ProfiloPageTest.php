@@ -39,9 +39,6 @@ class ProfiloPageTest extends TestCase
     ob_start();
     include __DIR__ . '/../../profilo.php';
     $output = ob_get_clean();
-    while (ob_get_level() > 0) {
-        ob_end_clean();
-    }
 
     $this->assertStringContainsString('Mario Spotify', $output);
     $this->assertStringContainsString('Informazioni Utente', $output);
