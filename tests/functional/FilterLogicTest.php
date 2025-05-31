@@ -11,7 +11,7 @@ class FilterLogicTest extends TestCase
 
     protected function setUp(): void
     {
-        // Connessione al database di test (modifica le credenziali!)
+        // Connessione al database di test
         $this->pdo = new PDO('pgsql:host=localhost;dbname=untuned_test', 'postgres', 'biar');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
