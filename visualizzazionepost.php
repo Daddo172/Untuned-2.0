@@ -76,22 +76,22 @@ require '_inc/curl.class.php';
 			$filtervalues = $_GET['search'];
 			if(isset($_POST['inputgenerefiltro'])){
 				$generefiltro=$_POST['inputgenerefiltro'];
-				$query ="SELECT * from articolo WHERE genere='$generefiltro' titolo LIKE '%$filtervalues%' ORDER BY  datapubblicazione ";
+				$query ="SELECT * from post WHERE genere='$generefiltro' titolo LIKE '%$filtervalues%' ORDER BY  datapubblicazione ";
 			$result=pg_query($query);
 			$check=pg_num_rows($result);
 			}else{
-			$query ="SELECT * from articolo WHERE titolo LIKE '%$filtervalues%' ORDER BY  datapubblicazione";
+			$query ="SELECT * from post WHERE titolo LIKE '%$filtervalues%' ORDER BY  datapubblicazione";
 			$result=pg_query($query);
 			$check=pg_num_rows($result);}
 			}else{
 			if(isset($_POST['inputgenerefiltro'])){
 				$generefiltro=$_POST['inputgenerefiltro'];
-				$query ="SELECT * from articolo WHERE genere='$generefiltro' ORDER BY  datapubblicazione ";
+				$query ="SELECT * from post WHERE genere='$generefiltro' ORDER BY  datapubblicazione ";
 			$result=pg_query($query);
 			$check=pg_num_rows($result);
 			}else{
-				$articoloid=$_GET['ARTICOLOID'];
-			$query ="SELECT * from articolo where articoloid = '$articoloid'   ORDER BY  datapubblicazione";
+				$postid=$_GET['POSTID'];
+			$query ="SELECT * from post where postid = '$postid'   ORDER BY  datapubblicazione";
 			$result=pg_query($query);
 			$check=pg_num_rows($result);}}
 
@@ -101,13 +101,17 @@ require '_inc/curl.class.php';
 		</nav>
 	</header>
 	<br>
-
+	<?php  if (!empty($_SESSION['spotify_token'])) { ?>
+		<div style="text-align: center;">
+                    <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Crea Post</a>
+                </div>
+				<?php } ?>
 
 	<div class="form-2" style="width:auto;margin-left: auto;margin-right: auto;">
         <div class="table-responsive-lg" style="border:5px outset;">
             <table class="table table-bordered">
                 <thead>
-                    <h1 style="text-align:center;color:black;">ID ARTICOLO: #<?php $articoloid=$_GET['ARTICOLOID']; echo $_GET['ARTICOLOID'] ?></h1>
+                    <h1 style="text-align:center;color:black;">ID POST: #<?php $postid=$_GET['POSTID']; echo $_GET['POSTID'] ?></h1>
                 <tbody>
                 <?php
             if($check >0){
@@ -119,23 +123,23 @@ require '_inc/curl.class.php';
 									<td><?php echo $row['genere']; ?></td>
 									<td><?php echo $row['datapubblicazione']; ?></td>
 									<td><?php if (!isset($_SESSION['spotify_nome'])){
-			$creatore= $_SESSION['email'];} else{$creatore=$row['emailcreatore'];} echo $row['emailcreatore']; ?></td>
+			$creatore='';} else{$creatore=$row['emailcreatore'];} echo $row['emailcreatore']; ?></td>
 									<?php  if (!empty($_SESSION['spotify_token'])) { ?>
 									<td><form style="margin-top: -15px;">
-									<button type="submit" class="btn btn-success" disabled>Modifica dati</button>
-								</form></td>
+                                <a href="edit.php?utentepostid=<?php echo $row['postid']; ?>" class="btn btn-success">Modifica dati</a>
+                    </form></td>
                             <td> 
                                 <form style="margin-top: -15px;" action="code.php" method="POST">
-                                <input type="hidden" name=utentedeleteid value="<?php echo $articoloid ?>">
-                                <button type="submit" class="btn btn-danger" disabled>Cancella dati</button>
+                                <input type="hidden" name=utentedeleteid value="<?php echo $row['postid']; ?>">
+                                <button type="submit" class="btn btn-danger">Cancella dati</button>
 								<?php } else{ ?>
 									<td><form style="margin-top: -15px;">
-									<a href="edit.php?utentearticoloid=<?php echo $articoloid ?>" class="btn btn-success">Modifica dati</a>
-									</form></td>
+                                <button href="edit.php?utentepostid=<?php echo $row['postid']; ?>" class="btn btn-success" disabled>Modifica dati</l>
+                    </form></td>
                             <td> 
                                 <form style="margin-top: -15px;" action="code.php" method="POST">
-                                <input type="hidden" name=utentedeleteid value="<?php echo $row['articoloid']; ?>">
-                                <button type="submit" class="btn btn-danger">Cancella dati</button>
+                                <input type="hidden" name=utentedeleteid value="<?php echo $row['postid']; ?>">
+                                <button type="submit" class="btn btn-danger" disabled>Cancella dati</button>
 								
 								</tr> <?php }
 					}
@@ -149,12 +153,12 @@ require '_inc/curl.class.php';
                 <thead>
                 <?php  if (!empty($_SESSION['spotify_token'])) { ?>
 		<div style="text-align: center;">
-                    <a href="creacommentoarticolo.php?utentearticoloid=<?php echo $articoloid ?>" class="button" type="submit" value="Inserisci" id="inserisci">Crea Commento</a>
+                    <a href="creacommento.php?utentepostid=<?php echo $postid ?>" class="button" type="submit" value="Inserisci" id="inserisci">Crea Commento</a>
                 </div> <?php } ?>
                 <h1>Commenti:</h1></thead>
                 <tbody>
             <?php 
-            $query3 ="SELECT * from commenti WHERE articoloid='$articoloid' ORDER BY  datacommento ";
+            $query3 ="SELECT * from commenti WHERE postid='$postid' ORDER BY  datacommento ";
             $result3=pg_query($query3);
             $check3=pg_num_rows($result3);
 			if($check3 >0){
@@ -165,9 +169,9 @@ require '_inc/curl.class.php';
 									<td><?php echo $row3['contenuto']; ?></td>
 									<td><?php echo $row3['orariocommento']; ?></td>
 									<td><?php echo $row3['datacommento']; ?></td>
-									<?php if($_SESSION['email']==$creatore) { ?>
+									<?php if($creatore==$row3['utenteemail']) { ?>
 									<td><form style="margin-top: -15px;">
-                                <a href="edit.php?utentearticoloidcommento=<?php echo $row3['commentiid']; ?>" class="btn btn-success">Modifica commento</a>
+                                <a href="edit.php?utentepostidcommento=<?php echo $row3['commentiid']; ?>" class="btn btn-success">Modifica commento</a>
                     </form></td>
                             <td> 
                                 <form style="margin-top: -15px;" action="code.php" method="POST">
@@ -175,7 +179,7 @@ require '_inc/curl.class.php';
                                 <button type="submit" class="btn btn-danger">Cancella commento</button>
 								<?php } else{ ?>
 									<td><form style="margin-top: -15px;">
-                                <button href="edit.php?utentearticoloidcommento=<?php echo $row3['commentiid']; ?>" class="btn btn-success" disabled>Modifica commento</l>
+                                <button href="edit.php?utentepostidcommento=<?php echo $row3['commentiid']; ?>" class="btn btn-success" disabled>Modifica commento</l>
                     </form></td>
                             <td> 
                                 <form style="margin-top: -15px;" action="code.php" method="POST">

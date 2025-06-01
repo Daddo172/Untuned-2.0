@@ -7,11 +7,6 @@ $__redirect_uri ="http://localhost:3000/callback/index.php";
 $__base_url="https://accounts.spotify.com";
 $__app_url="http://localhost:3000/index.php";
 require '_inc/curl.class.php';
-
-if (!isset($_SESSION['spotify_nome']) || !isset($_SESSION['email'])) {
-    header("Location: index.php");
-    exit;
-}
 ?>
 <html lang="en">
 <head>
@@ -41,9 +36,6 @@ if (!isset($_SESSION['spotify_nome']) || !isset($_SESSION['email'])) {
 	<header class="topnav">
 		<nav>
 		<a class="titolo" href="index.php">Untuned</a>
-		<a class="pulsantiNav" href="index.php">Home</a>
-			<span style="margin: 0 10px; border-left: 3px solid white; height: 20px; display: inline-flex;"></span>
-			<a class="pulsantiNav" href="articoli.php">Articoli</a>
 			<?php if (!empty($_SESSION['spotify_token'])) {
 						$__cURL = new CurlServer();
 
@@ -55,7 +47,7 @@ if (!isset($_SESSION['spotify_nome']) || !isset($_SESSION['email'])) {
 						<div class="log dropdown">
 							<button class="dropbtn"><?= $_SESSION['spotify_nome'] ?></button>
 							<div class="dropdown-content">
-								<a href="articoli.php">Articoli</a>
+							    <a href="articoli.php">Articoli</a>
 								<a href="profilo.php">Area Personale</a>
 								<a href="logout.php">Logout</a>
 							</div>
@@ -96,9 +88,10 @@ if (!isset($_SESSION['spotify_nome']) || !isset($_SESSION['email'])) {
 		$q= "SELECT * from utente WHERE nome = $1 ";
 		$r=pg_query_params($dbconn,$q,array($nome));
 		$ro = pg_fetch_array($r,NULL,PGSQL_ASSOC);
-		?><br><br>
+		?>
 	<form action="code.php" method="POST" style="margin-top: 60px auto 60px auto;min-width:30%;">
                 <div class="formhead">CREA IL POST</div>
+				<input type="hidden" name=insertutentepostid value="<?php echo $row['numeroid'] + 69; ?>">
 				<input type="hidden" name=inputorariopubblicazione value="<?php echo $ora; ?>">
 				<input type="hidden" name=inputdatapubblicazione value="<?php echo $data; ?>">
 				<input type="hidden" name=inputemailcreatore value="<?php echo $ro['email']; ?>">
@@ -122,11 +115,8 @@ if (!isset($_SESSION['spotify_nome']) || !isset($_SESSION['email'])) {
                         <p>
                             <td><label for="inputgenere">Genere </label></td>
                             <td><select type="text" name="inputgenere" id="inputgenere" required>
-								<option value="genere1">Pop</option>
-					<option value="genere2">Hip Hop / Rap</option>	
-					<option value="genere3">Rock</option>	
-					<option value="genere4">EDM (Electronic Dance Music)</option>	
-					<option value="genere5">Reggaeton / Latin</option>	
+								<option value="genere1">Genere 1</option>
+								<option value="genere2">Genere 2</option>
 							</td>
                         </p>
                     </tr>
@@ -137,7 +127,7 @@ if (!isset($_SESSION['spotify_nome']) || !isset($_SESSION['email'])) {
 					<input class="button" type="reset" value="Annulla" id="inserisci">
 				</div>
                 <p></div>
-            </form><br><br>
+            </form>
 	</div>
 	<main>
 	

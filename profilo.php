@@ -1,26 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
 session_start(); 
-// profilo.php (in alto)
-require_once '_inc/curl.class.php';
-
-global $curl;
-if (!isset($curl)) {
-    $curl = new CurlServer(); // se non lo passa il test, usiamo quello reale
-}
-
 $__app_secret = "a76619b8bddd432b9248fa0be1d4ce3a";
 $__app_client_id = "05a4f7e97e5f4fd9bd130d40feb97392";
 $__redirect_uri ="http://localhost:3000/callback/index.php";
 $__base_url="https://accounts.spotify.com";
 $__app_url="http://localhost:3000/index.php";
+require '_inc/curl.class.php';
 $dbconn = pg_connect("host=localhost dbname=Untuned user=postgres password=biar port=5432");
 ?>
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Untuned</title>
+    <title>EasyRail</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stile.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap">
@@ -36,114 +29,139 @@ $dbconn = pg_connect("host=localhost dbname=Untuned user=postgres password=biar 
     </style>
 </head>
 <main style="background: url(pictures/back3.jpg) no-repeat; background-size: cover; background-position: center;">
+    <!--Barra superiore-->
     <header class="topnav">
         <nav style="height:70px;">
-            <a class="titolo" href="index.php">Untuned</a>
-            <a class="pulsantiNav" href="index.php">Home</a>
-            <span style="margin: 0 10px; border-left: 3px solid white; height: 20px; display: inline-flex;"></span>
-            <a class="pulsantiNav" href="articoli.php">Articoli</a>
-            <?php if(isset($_SESSION['name'])) { ?>
-                <button class="dropbtn"><?= $_SESSION['name']?></button>
-                <div class="dropdown-content">
-                    <?php if($_SESSION['name'] == 'Admin') {
-                        header("location:Admin.php");
-                    } else { ?>
-                        <a href="profilo.php">Area Personale</a>
-                        <a href="logout.php">Logout</a>
-                    <?php } ?>
-                </div>
-            <?php } elseif (!empty($_SESSION['spotify_token'])) {
-                $curl = new CurlServer();
-                $nome = 'https://api.spotify.com/v1/me';
-                $nome_user = $curl->get_request($nome, $_SESSION['spotify_token']->access_token);
-                $_SESSION['spotify_nome'] = $nome_user->display_name;
-            ?>
-                <div class="log dropdown">
-                    <button class="dropbtn"><?= $_SESSION['spotify_nome'] ?></button>
-                    <div class="dropdown-content">
-                        <a href="profilo.php">Area Personale</a>
-                        <a href="logout.php">Logout</a>
-                    </div>
-                </div>
-            <?php } else { ?>
-                <div class="log dropdown">
-                    <button class="dropbtn">Accedi</button>
-                    <div class="dropdown-content">
-                        <a href="Loginform.php">Login</a>
-                        <a href="Register.html">Registrati</a>
-                    </div>
-                </div>
-            <?php } ?>
-        </nav>
+        <a class="titolo" href="index.php">Untuned</a>
+			<?php if(isset($_SESSION['name'])){?>
+				<div class="log dropdown">
+					<button class="dropbtn"><?= $_SESSION['name']?></button>
+					<div class="dropdown-content">
+					<a href="articoli.php">Articoli</a>
+						<?php if($_SESSION['name'] == 'Admin'){ 
+							header("location:Admin.php");?>
+						
+						<?php }else{?>
+						<a href="profilo.php">Area Personale</a>
+						<a href="logout.php">Logout</a>
+						<?php } ?>
+					</div>
+				</div>
+				<?php }else if (!empty($_SESSION['spotify_token'])) {
+						$__cURL = new CurlServer();
+
+						$nome = 'https://api.spotify.com/v1/me';
+						
+						$nome_user = $__cURL->get_request($nome, $_SESSION['spotify_token']->access_token);
+						$_SESSION['spotify_nome'] = $nome_user->display_name;
+						?>
+						<div class="log dropdown">
+							<button class="dropbtn"><?= $_SESSION['spotify_nome'] ?></button>
+							<div class="dropdown-content">
+							<a href="articoli.php">Articoli</a>
+								<a href="profilo.php">Area Personale</a>
+								<a href="logout.php">Logout</a>
+							</div>
+						</div>
+						<?php 
+					}else{?>
+				<div class="log dropdown">
+					<button class="dropbtn">Accedi</button>
+				<div class="dropdown-content">
+					<a href="Loginform.php">Login</a>
+					<a href="Register.html">Registrati</a>
+				</div>
+			</div>
+			<?php }?>
+            </nav>
     </header>
 
     <body>
         <div class="form-2">
-            <form>
-                <h1 style="text-align:center;">Informazioni Utente</h1>
-                <div class="table-responsive-lg" style="width:100%;">
-                    <table class="table table-bordered">
-                        <?php 
+        <form>
+            <h1 style="text-align:center;">Informazioni Utente</h1>
+            <div class="table-responsive-lg" style="width:100%;">
+                <table class="table table-bordered"> <?php 
+                    $__cURL = new CurlServer();
 
-                        $nome = 'https://api.spotify.com/v1/me';
-                        $nome_user = $curl->get_request($nome, $_SESSION['spotify_token']->access_token);
-                        $_SESSION['spotify_nome'] = $nome_user->display_name;
-                        $_SESSION['spotify_id'] = $nome_user->id;
-                        ?>
-                        <thead>
-                            <tr>
-                                <th>Nome a schermo</th>
-                                <th>ID spotify</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <td><?= $_SESSION['spotify_nome']; ?></td>
-                            <td><?= $nome_user->id; ?></td>
-                        </tbody>
-                    </table>
-                </div>
-            </form>
-        </div>
-
-        <div class="container my-5">
-            <h1 class="text-center mb-4">Le Tue Statistiche Spotify</h1>
-            <div class="row justify-content-center">
-                <?php
-                $nome = $_SESSION['spotify_nome'];
-                $q = "SELECT canzone1, canzone2, canzone3, artista1, artista2, artista3 FROM utente WHERE nome = $1";
-                $r = pg_query_params($dbconn, $q, array($nome));
-                $stats = pg_fetch_array($r, NULL, PGSQL_ASSOC);
-                ?>
-
-                <!-- Top 3 Canzoni -->
-                <div class="col-md-5 mb-4">
-                    <div class="card shadow">
-                        <div class="card-header bg-primary text-white text-center" style="background-color: rgb(62 152 41) !important;">
-                            <h4 class="mb-0">Top 3 Canzoni</h4>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item"><?= $stats['canzone1'] ?? 'nessuna canzone'; ?></li>
-                            <li class="list-group-item"><?= $stats['canzone2'] ?? 'nessuna canzone'; ?></li>
-                            <li class="list-group-item"><?= $stats['canzone3'] ?? 'nessuna canzone'; ?></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Top 3 Artisti -->
-                <div class="col-md-5 mb-4">
-                    <div class="card shadow">
-                        <div class="card-header bg-success text-white text-center">
-                            <h4 class="mb-0">Top 3 Artisti</h4>
-                        </div>
-                        <ul class="list-group list-group-flush text-center">
-                            <li class="list-group-item"><?= $stats['artista1'] ?? 'nessun artista'; ?></li>
-                            <li class="list-group-item"><?= $stats['artista2'] ?? 'nessun artista'; ?></li>
-                            <li class="list-group-item"><?= $stats['artista3'] ?? 'nessun artista'; ?></li>
-                        </ul>
-                    </div>
-                </div>
+                    $nome = 'https://api.spotify.com/v1/me';
+                    
+                    $nome_user = $__cURL->get_request($nome, $_SESSION['spotify_token']->access_token);
+                    $_SESSION['spotify_nome'] = $nome_user->display_name;
+                    $_SESSION['spotify_id'] = $nome_user->id; ?>
+                    <thead>
+                        <tr>
+                            <th>Nome a schermo</th>
+                            <th>ID spotify</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td><?php echo $_SESSION['spotify_nome']; ?></td>
+                        <td><?php echo $nome_user->id; ?></td>
+                    </tbody>                   
+                </table>
+                
             </div>
+        </form>
         </div>
+        <div class="form-2" style="width:auto;margin-left: auto;margin-right: auto;padding:16px;">
+            <h1 style="text-align:center;">Statistiche profilo</h1>
+            <div class="container">
+  <div class="row">
+    <div class="col-sm" style="text-align:center;">
+      <h2>Top 3 canzoni:</h2>
+            <?php  
+                $i= 0;
+                $req_url = 'https://api.spotify.com/v1/me/top/tracks';
+                $top_user_tracks = $__cURL->get_request($req_url, $_SESSION['spotify_token']->access_token);
+                foreach ($top_user_tracks as $content_value) {
+                    if (is_array($content_value)) {
+                        // Loop the obtained results to print content for user
+                        foreach ($content_value as $value) {
+        
+                            echo "<div class='grid_item'>";
+                            echo "Titolo: $value->name <br/>";
+                            echo "</div>";
+                            $_SESSION[$i]= $value->id;
+                            if(++$i == 3) break;
+                        }
+                    }
+                }
+                $_SESSION['canzone1'] = $_SESSION[0];
+                $_SESSION['canzone2'] = $_SESSION[1];
+                $_SESSION['canzone3'] = $_SESSION[2];
+                ?>
+    </div>
+    <div class="col-sm" style="text-align:center;">
+      <h2>Top 3 artisti:</h2>
+                
+            <?php
+                $j= 3;
+                $req_url = 'https://api.spotify.com/v1/me/top/artists';
+                $top_user_artists = $__cURL->get_request($req_url, $_SESSION['spotify_token']->access_token);
+                foreach ($top_user_artists as $content_value) {
+                    if (is_array($content_value)) {
+                        // Loop the obtained results to print content for user
+                        foreach ($content_value as $value) {
+        
+                            echo "<div class='grid_item'>";
+                            echo "Artista: $value->name <br/>";
+                            echo "</div>";
+                            $_SESSION[$j]= $value->id;
+                            if(++$j == 6) break;
+                        }
+                    }
+                }
+                $_SESSION['artista1'] = $_SESSION[3];
+                $_SESSION['artista2'] = $_SESSION[4];
+                $_SESSION['artista3'] = $_SESSION[5];
+                ?> 
+            </div>
+    </div>
+  </div>
+            
+                
+            </div>
         </div>
                     <!-- Post Creati -->
         <div class="form-2">
@@ -196,18 +214,8 @@ $dbconn = pg_connect("host=localhost dbname=Untuned user=postgres password=biar 
                 
             </div>
         </form>
-        
-        <?php 
-            //RICAVO EMAIL
-            if (!empty($_SESSION['spotify_token'])) {
-            $nome= $_SESSION['spotify_nome'];
-            $q= "SELECT * from utente WHERE nome = $1 ";
-            $r=pg_query_params($dbconn,$q,array($nome));
-            $ro = pg_fetch_array($r,NULL,PGSQL_ASSOC);
-            $email = $ro['email'];    }
-        ?>
         <div style="text-align: center;">
-                    <a href="index.php?email=<?php echo $email ?>" class="button" type="submit" value="Inserisci" id="inserisci">Mostra Post</a>
+                    <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Mostra Post</a>
                     <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Crea Post</a>
                 </div>
         </div>
@@ -258,27 +266,14 @@ $dbconn = pg_connect("host=localhost dbname=Untuned user=postgres password=biar 
             </div>
         </form>
         <div style="text-align: center;">
-            <a href="articoli.php?email=<?php echo $email ?>" class="button" type="submit" value="Inserisci" id="inserisci">Mostra Articoli</a>
-            <?php if ($ro['ruolo'] === 'Giornalista') { ?>
-                <a href="creaarticolo.php" class="button" id="inserisci">Crea Articolo</a>
-            <?php } else { ?>
-                <a href="#" class="button disabled" style="pointer-events: none; opacity: 0.6;" id="inserisci" title="Solo i Giornalisti possono creare articoli">Crea Articolo</a>
-            <?php } ?>
+                    <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Mostra Articoli</a>
+                    <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Crea Articolo</a>
         </div>
-            </div><br>
-            <?php
-            if (!empty($_SESSION['spotify_token'])) {    
-            $nome= $_SESSION['spotify_nome'];
-            $q= "SELECT * from utente WHERE nome = $1 ";
-            $r=pg_query_params($dbconn,$q,array($nome));
-            $ro = pg_fetch_array($r,NULL,PGSQL_ASSOC);
-            if($ro['ruolo'] != 'Giornalista'){?>
-            <div style="text-align: center;">
-                <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Richiedi Ruolo Giornalista</a>
-            </div><?php }} ?>
         </div>
-
-        <br><br><br>
+        <div style="text-align: center;">
+        <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Richiedi Ruolo Giornalista</a>
+                </div>
+        </div>
         
         </body>
         <!--Parte inferiore-->

@@ -17,15 +17,13 @@
 	<!-- Barra superiore-->
 	<header class="topnav">
 		<nav>	
-			<a class="titolo" href="index.php">Untuned</a>
-			<a class="pulsantiNav" href="index.php">Home</a>
-			<span style="margin: 0 10px; border-left: 3px solid white; height: 20px; display: inline-flex;"></span>
-			<a class="pulsantiNav" href="articoli.php">Articoli</a>
+			<a class="titolo" href="index.php" ALT="EasyRail">Untuned</a>
 			<div class="log dropdown">
-				<button class="dropbtn">Login</button>
+				<button class="dropbtn">Accedi</button>
 				<div class="dropdown-content">
-					<a href="LoginAdmin.php" class="center" > Admin</a>
-					<a href="Loginform.php" class="center" >Utente</a>
+					<a href="articoli.php">Articoli</a>
+					<a href="Login.html" class="center" >Login</a>
+					<a href="Register.html">Registrati</a>
 				</div>
 			</div>
 		</nav>

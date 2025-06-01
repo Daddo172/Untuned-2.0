@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <?php session_start(); 
 $dbconn = pg_connect("host=localhost dbname=Untuned user=postgres password=biar port=5432"); 
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
-    header("Location: LoginAdmin.php");
-    exit;
-}
+
 ?>
 <html lang="en">
 <head>
@@ -51,10 +48,9 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 		?>
 	<form action="code.php" method="POST" style="margin-top: 60px auto 60px auto;min-width:30%;">
                 <div class="formhead">CREA L'ARTICOLO</div>
-				<input type="hidden" name=insertgiornalistaarticoloidadmin value="<?php echo $row['numeroid'] + rand(); ?>">
+				<input type="hidden" name=insertgiornalistaarticoloid value="<?php echo $row['numeroid'] + rand(); ?>">
 				<input type="hidden" name=inputorariopubblicazione value="<?php echo $ora; ?>">
 				<input type="hidden" name=inputdatapubblicazione value="<?php echo $data; ?>">
-				<input type="hidden" name=inputemailcreatore value="admin@admin.it">
 
                 <table style="margin-left: auto;margin-right: auto;">
                     <tr>
@@ -83,11 +79,8 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
                         <p>
                             <td><label for="inputgenere">Genere: </label></td>
                             <td><select type="text" name="inputgenere" id="inputgenere" required>
-								<option value="genere1">Pop</option>
-					<option value="genere2">Hip Hop / Rap</option>	
-					<option value="genere3">Rock</option>	
-					<option value="genere4">EDM (Electronic Dance Music)</option>	
-					<option value="genere5">Reggaeton / Latin</option>	
+								<option value="genere1">Genere 1</option>
+								<option value="genere2">Genere 2</option>
 							</td>
                         </p>
                     </tr>

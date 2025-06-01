@@ -71,6 +71,7 @@ require '_inc/curl.class.php';
 					<button class="dropbtn">Accedi</button>
 				<div class="dropdown-content">
 					<a href="Loginform.php">Login</a>
+					<a href="Register.html">Registrati</a>
 				</div><?php if(isset($_SESSION['name']) && $_SESSION['name'] == 'Admin')
 									header("location:Admin.php");?>
 			</div>
@@ -79,22 +80,11 @@ require '_inc/curl.class.php';
 			$filtervalues = $_GET['search'];
 			if(isset($_POST['inputgenerefiltro'])){
 				$generefiltro=$_POST['inputgenerefiltro'];
-				$query ="SELECT * from post WHERE genere='$generefiltro' and ban='false' titolo LIKE '%$filtervalues%' ORDER BY  datapubblicazione ";
+				$query ="SELECT * from post WHERE genere='$generefiltro' titolo LIKE '%$filtervalues%' ORDER BY  datapubblicazione ";
 			$result=pg_query($query);
 			$check=pg_num_rows($result);
 			}else{
 			$query ="SELECT * from post WHERE titolo LIKE '%$filtervalues%' ORDER BY  datapubblicazione";
-			$result=pg_query($query);
-			$check=pg_num_rows($result);}
-			}else if(isset($_GET['email'])){
-			$filtervalues = $_GET['email'];
-			if(isset($_POST['inputgenerefiltro'])){
-				$generefiltro=$_POST['inputgenerefiltro'];
-				$query ="SELECT * from post WHERE genere='$generefiltro' and emailcreatore='$filtervalues' and ban='false' ORDER BY  datapubblicazione ";
-			$result=pg_query($query);
-			$check=pg_num_rows($result);
-			}else{
-			$query ="SELECT * from post WHERE emailcreatore='$filtervalues' and ban='false' ORDER BY  datapubblicazione";
 			$result=pg_query($query);
 			$check=pg_num_rows($result);}
 			}else{
@@ -114,17 +104,11 @@ require '_inc/curl.class.php';
 		</nav>
 	</header>
 	<br>
-	<?php
-	if (!empty($_SESSION['spotify_token'])) {
-	$nome= $_SESSION['spotify_nome'];
-	$q= "SELECT * from utente WHERE nome = $1 ";
-	$r=pg_query_params($dbconn,$q,array($nome));
-	$ro = pg_fetch_array($r,NULL,PGSQL_ASSOC);
-	if($ro['ruolo'] == 'Utente'){?>
+	<?php  if (!empty($_SESSION['spotify_token'])) { ?>
 		<div style="text-align: center;">
                     <a href="creapost.php" class="button" type="submit" value="Inserisci" id="inserisci">Crea Post</a>
                 </div>
-				<?php }} ?>
+				<?php } ?>
 
 
 	<!-- parte centrale-->
@@ -132,14 +116,10 @@ require '_inc/curl.class.php';
 		<form style="margin-top: -15px; display: flex; justify-content: space-between; align-items: center;" action="index.php" method="POST">
 			<h3 style="margin: 0; margin-right: auto;">Genere</h3>
 			<div style="display: flex; align-items: center; margin-left: auto;">
-				<select name="inputgenerefiltro" required style="width: 150px; height: 40px; font-size: 16px;">
-  <option value="Pop">Pop</option>
-  <option value="Hip Hop / Rap">Hip Hop / Rap</option>  
-  <option value="Rock">Rock</option>  
-  <option value="EDM (Electronic Dance Music)">EDM (Electronic Dance Music)</option>  
-  <option value="Reggaeton / Latin">Reggaeton / Latin</option>  
-</select>
-
+				<select type="text" name="inputgenerefiltro" id="inputgenerefiltro" required style="width: 150px; height: 40px; font-size: 16px;">
+					<option value="genere1">Genere 1</option>
+					<option value="genere2">Genere 2</option>	
+				</select>
 				<button type="submit" class="btn btn-danger" style="margin-left: 10px;">Applica</button>
 			</div>
 		</form>
@@ -185,8 +165,9 @@ require '_inc/curl.class.php';
             <span class="email"><?php echo htmlspecialchars($creatore, ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
 
+        <!-- Azioni: Modifica/Cancella allineate a destra -->
         <div class="post-actions">
-            <?php if (!empty($_SESSION['email']) && $_SESSION['email'] === $creatore) { ?>
+            <?php if (!empty($_SESSION['spotify_token']) && $creatore === 'scolamierod@gmail.com') { ?>
                 <a href="edit.php?utentepostid=<?php echo $row['postid']; ?>" class="btn btn-success">Modifica dati</a>
                 <form action="code.php" method="POST" style="display:inline">
                     <input type="hidden" name="utentedeleteid" value="<?php echo $row['postid']; ?>">

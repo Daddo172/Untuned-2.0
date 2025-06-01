@@ -7,11 +7,6 @@ $__redirect_uri ="http://localhost:3000/callback/index.php";
 $__base_url="https://accounts.spotify.com";
 $__app_url="http://localhost:3000/index.php";
 require '_inc/curl.class.php';
-
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
-    header("Location: LoginAdmin.php");
-    exit;
-}
 ?>
 <html lang="en">
 <head>
@@ -52,34 +47,31 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 	<div>
 	<form action="code.php" method="POST" style="margin-top: 60px auto 60px auto;min-width:30%;">
                 <div class="formhead">UPGRADE UTENTE</div>
+				<input type="hidden" name=insertutentecommentoidpost value="<?php echo $row['numeroid'] + rand(); ?>">				<input type="hidden" name=inputorariopubblicazione value="<?php echo $ora; ?>">
+				<input type="hidden" name=inputdatapubblicazione value="<?php echo $data; ?>">
+				<input type="hidden" name=inputemailcreatore value="<?php echo $ro['email']; ?>">
 
                 <table style="margin-left: auto;margin-right: auto;">
                     <tr>
                         <p>
-                            <td><label for="inputidutente">ID Utente: </label></td>
-                            <td><input type="text" name="inputidutente" id="inputidutente" required>
-				</input>
+                            <td><label for="inputcontenuto">ID Utente: </label></td>
+                            <td><textarea type="text" name="inputcontenuto" id="inputcontenuto" required>
+				</textarea>
 							</td>
                         </p>
                     </tr>
                     <tr>
                         <p>
-                            <td><label for="inputruolocorrente">Ruolo Corrente: </label>
-							<select type="text" name="inputruolocorrente" id="inputruolocorrente" required>	
-							<option value="Utente">Utente</option>
-                                    <option value="Admin">Admin</option>	
-									<option value="Giornalista">Giornalista</option>	
-						</select></td>
+                            <td><label for="inputcontenuto">Ruolo Corrente: </label></td>
                         </p>
                     </tr>
                     <tr>
                         <p>
                         <td>
-                            <label for="inputnuovoruolo">Nuovo Ruolo: </label>
-                                <select type="text" name="inputnuovoruolo" id="inputnuovoruolo" required>
-                                    <option value="Utente">Utente</option>
-                                    <option value="Admin">Admin</option>	
-									<option value="Giornalista">Giornalista</option>	
+                            <label for="inputcontenuto">Nuovo Ruolo: </label>
+                                <select type="text" name="inputgenerefiltro" id="inputgenerefiltro" required>
+                                    <option value="genere1">Ruolo 1</option>
+                                    <option value="genere2">Ruolo 2</option>	
                                 </select>
                         </td>
                         </p>

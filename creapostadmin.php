@@ -7,10 +7,6 @@ $__redirect_uri ="http://localhost:3000/callback/index.php";
 $__base_url="https://accounts.spotify.com";
 $__app_url="http://localhost:3000/index.php";
 require '_inc/curl.class.php';
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
-    header("Location: LoginAdmin.php");
-    exit;
-}
 ?>
 <html lang="en">
 <head>
@@ -49,18 +45,12 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 		</header>
 
 	<div>
-	<?php $query="SELECT count(*) as numeroid from post"; 
-		$result=pg_query($dbconn,$query);
-		$row = pg_fetch_array($result,NULL,PGSQL_ASSOC);
-		$ora= date("H:i:s");
-		$data= date("Y-m-d");
-		$q= "SELECT * from utente WHERE nome = $1 ";		?>
 	<form action="code.php" method="POST" style="margin-top: 60px auto 60px auto;min-width:30%;">
                 <div class="formhead">CREA POST</div>
-				<input type="hidden" name="creato_da_admin" value="true">
+				<input type="hidden" name=insertutentepostid value="<?php echo $row['numeroid'] + 69; ?>">
 				<input type="hidden" name=inputorariopubblicazione value="<?php echo $ora; ?>">
 				<input type="hidden" name=inputdatapubblicazione value="<?php echo $data; ?>">
-				<input type="hidden" name=inputemailcreatore value="admin@admin.it">
+				<input type="hidden" name=inputemailcreatore value="<?php echo $ro['email']; ?>">
 
                 <table style="margin-left: auto;margin-right: auto;">
                     <tr>
@@ -81,11 +71,8 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
                         <p>
                             <td><label for="inputgenere">Genere: </label></td>
                             <td><select type="text" name="inputgenere" id="inputgenere" required>
-								<option value="genere1">Pop</option>
-					<option value="genere2">Hip Hop / Rap</option>	
-					<option value="genere3">Rock</option>	
-					<option value="genere4">EDM (Electronic Dance Music)</option>	
-					<option value="genere5">Reggaeton / Latin</option>	
+								<option value="genere1">Genere 1</option>
+								<option value="genere2">Genere 2</option>
 							</td>
                         </p>
                     </tr>

@@ -3,70 +3,62 @@
 $dbconn = pg_connect("host=localhost dbname=Untuned user=postgres password=biar port=5432");
 
 //Controlli su diversi valori inviati da un form della fase di inserimento nella pagina insert.php
-if(isset($_POST['insertnome']))
-{
-    $email=$_POST['inputemail'];
-    $nome=$_POST['insertnome'];
-    $ruolo=$_POST['inputruolo'];
-    $paswd=$_POST['inputpassword'];
-    $id=$_POST['inputidspotify'];
-    $canzone1=$_POST['inputcanzone1'];
-    $canzone2=$_POST['inputcanzone2'];
-    $canzone3=$_POST['inputcanzone3'];
-    $artista1=$_POST['inputartista1'];
-    $artista2=$_POST['inputartista2'];
-    $artista3=$_POST['inputartista3'];
-
-    $q2 = "INSERT into utente values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
-    $data = pg_query_params($dbconn, $q2,
-    array($email, $nome, $paswd, $ruolo, $id, $canzone1 ,$canzone2,$canzone3,$artista1,$artista2,$artista3));
-    header('location: admin.php');
-}
+    if(isset($_POST['insertnome']))
+    {
+        $email=$_POST['inputemail'];
+        $nome=$_POST['insertnome'];
+        $ruolo=$_POST['inputruolo'];
+        $paswd=$_POST['inputpassword'];
+        $id=$_POST['inputidspotify'];
+        $canzone1=$_POST['inputcanzone1'];
+        $canzone2=$_POST['inputcanzone2'];
+        $canzone3=$_POST['inputcanzone3'];
+        $artista1=$_POST['inputartista1'];
+        $artista2=$_POST['inputartista2'];
+        $artista3=$_POST['inputartista3'];
+        
 
 
-if(isset($_POST['inputtitolo']) && isset($_POST['inputcontenuto']) && isset($_POST['inputemailcreatore']))
-{
-    //CREA POST ADMIN
-    if (isset($_POST['creato_da_admin']) && $_POST['creato_da_admin'] === "true") {
-        $titolo = $_POST['inputtitolo'];
-        $contenuto = $_POST['inputcontenuto'];
-        $genere = $_POST['inputgenere'];
-        $datapubblicazione = $_POST['inputdatapubblicazione'];
-        $orariopubblicazione = $_POST['inputorariopubblicazione'];
-        $emailcreatore = $_POST['inputemailcreatore'];
+        $q2 = "INSERT into utente values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
+        $data = pg_query_params($dbconn, $q2,
+        array($email, $nome, $paswd, $ruolo, $id, $canzone1 ,$canzone2,$canzone3,$artista1,$artista2,$artista3));
+        header('location: admin.php');
+    }
 
-        $q1 = "INSERT INTO post (titolo, contenuto, genere, datapubblicazione, orariopubblicazione, emailcreatore)
-            VALUES ($1, $2, $3, $4, $5, $6)";
-        $data = pg_query_params($dbconn, $q1, array(
-            $titolo, $contenuto, $genere, $datapubblicazione, $orariopubblicazione, $emailcreatore
-        ));
-
-        if (!$data) {
-            error_log("Errore nella query post admin: " . pg_last_error($dbconn));
-            exit("Errore nella creazione del post.");
-        }
-
-        header('Location: Admin.php');
-        exit;
-    } else { 
+    if(isset($_POST['insertid']))
+    {
+        $postid=$_POST['insertid'];
         $titolo=$_POST['inputtitolo'];
         $contenuto=$_POST['inputcontenuto'];
         $genere=$_POST['inputgenere'];
         $datapubblicazione=$_POST['inputdatapubblicazione'];
         $orariopubblicazione=$_POST['inputorariopubblicazione'];
         $emailcreatore=$_POST['inputemailcreatore'];
+        
 
-        $q1 = "INSERT INTO post (titolo, contenuto, genere, datapubblicazione, orariopubblicazione, emailcreatore)
-                VALUES ($1, $2, $3, $4, $5, $6)";
+
+        $q1 = "INSERT into post values ($1,$2,$3,$4,$5,$6,$7)";
         $data = pg_query_params($dbconn, $q1,
-            array($titolo, $contenuto, $genere, $datapubblicazione, $orariopubblicazione, $emailcreatore));
-        if (!$data) {
-            error_log("Errore nella query: " . pg_last_error($dbconn));
-            exit;
-        }
-        header('location: index.php');
+            array($postid, $titolo,$contenuto,$genere,$datapubblicazione,$emailcreatore,$orariopubblicazione));
+            header('location: admin.php');
     }
-}
+    if(isset($_POST['insertutentepostid']))
+    {
+        $postid=$_POST['insertutentepostid'];
+        $titolo=$_POST['inputtitolo'];
+        $contenuto=$_POST['inputcontenuto'];
+        $genere=$_POST['inputgenere'];
+        $datapubblicazione=$_POST['inputdatapubblicazione'];
+        $orariopubblicazione=$_POST['inputorariopubblicazione'];
+        $emailcreatore=$_POST['inputemailcreatore'];
+        
+
+
+        $q1 = "INSERT into post values ($1,$2,$3,$4,$5,$6,$7)";
+        $data = pg_query_params($dbconn, $q1,
+            array($postid, $titolo,$contenuto,$genere,$datapubblicazione,$orariopubblicazione,$emailcreatore));
+            header('location: index.php');
+    }
     if(isset($_POST['insertutentecommentoidpost']))
     {
         $commentiid=$_POST['insertutentecommentoidpost'];
@@ -335,129 +327,4 @@ if(isset($_POST['inputtitolo']) && isset($_POST['inputcontenuto']) && isset($_PO
         $result=pg_query($dbconn,$query);
         header('location: profilo.php');
     }
-//UPGRADE UTENTE ADMIN
-if(isset($_POST['inputidutente'])) {
-    $idutente = $_POST['inputidutente'];
-    $ruolocorrente = $_POST['inputruolocorrente'];
-    $nuovoruolo = $_POST['inputnuovoruolo'];
-
-    // Verifica se l'utente con nome e ruolo corrente esiste
-    $q_check = "SELECT * FROM utente WHERE nome = $1 AND ruolo = $2";
-    $result = pg_query_params($dbconn, $q_check, array($idutente, $ruolocorrente));
-
-    if (pg_num_rows($result) === 0) {
-        // se utente non trovato mostra alert
-        echo "<script>
-            alert('Nome utente e/o ruolo non esistenti nel database');
-            window.location.href = 'upgradeutenteadmin.php';
-        </script>";
-        exit;
-    }
-
-    // Utente esiste, aggiorna ruolo
-    $query = "UPDATE utente SET ruolo = $1 WHERE nome = $2 AND ruolo = $3";
-    $data = pg_query_params($dbconn, $query, array($nuovoruolo, $idutente, $ruolocorrente));
-
-    if ($data) {
-        header('Location: Admin.php');
-        exit;
-    } else {
-        echo "<script>
-            alert('Errore nell\'aggiornamento del ruolo.');
-            window.location.href = 'upgradeutente.php';
-        </script>";
-        exit;
-    }
-}
-    //CREA ARTICOLO ADMIN    
-    if(isset($_POST['insertgiornalistaarticoloidadmin']))
-    {
-        $articoloid=$_POST['insertgiornalistaarticoloidadmin'];
-        $titolo=$_POST['inputtitolo'];
-        $contenuto=$_POST['inputcontenuto'];
-        $genere=$_POST['inputgenere'];
-        $datapubblicazione=$_POST['inputdatapubblicazione'];
-        $orariopubblicazione=$_POST['inputorariopubblicazione'];
-        $emailcreatore=$_POST['inputemailcreatore'];
-        
-
-
-        $q1 = "INSERT into articolo values ($1,$2,$3,$4,$5,$6,$7)";
-        $data = pg_query_params($dbconn, $q1,
-        array($articoloid, $titolo,$contenuto,$genere,$datapubblicazione,$orariopubblicazione,$emailcreatore));
-        header('location: Admin.php'); 
-    }
-//DELETE RICHIESTA
-if(isset($_POST['richiestericevute'])){
-    $email=$_POST['richiestericevute'];
-    $query="DELETE FROM richieste WHERE email='$email'";
-    $result=pg_query($dbconn,$query);
-    header('location: Admin.php');
-}
-//BAN-SBAN
-if(isset($_POST['idpostban']))
-    {
-        $idpost=$_POST['idpostban'];
-
-        $query = "UPDATE post SET Ban='true' WHERE postid='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-    if(isset($_POST['idpostsban']))
-    {
-        $idpost=$_POST['idpostsban'];
-
-        $query = "UPDATE post SET Ban='false' WHERE postid='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-    if(isset($_POST['idarticoloban']))
-    {
-        $idpost=$_POST['idarticoloban'];
-
-        $query = "UPDATE articolo SET Ban='true' WHERE articoloid='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-    if(isset($_POST['idarticolosban']))
-    {
-        $idpost=$_POST['idarticolosban'];
-
-        $query = "UPDATE articolo SET Ban='false' WHERE articoloid='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-    if(isset($_POST['idcommentoban']))
-    {
-        $idpost=$_POST['idcommentoban'];
-
-        $query = "UPDATE commenti SET Ban='true' WHERE commentiid='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-    if(isset($_POST['idcommentosban']))
-    {
-        $idpost=$_POST['idcommentosban'];
-
-        $query = "UPDATE commenti SET Ban='false' WHERE commentiid='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-    if(isset($_POST['idutenteban']))
-    {
-        $idpost=$_POST['idutenteban'];
-
-        $query = "UPDATE utente SET Ban='true' WHERE email='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-    if(isset($_POST['idutentesban']))
-    {
-        $idpost=$_POST['idutentesban'];
-
-        $query = "UPDATE utente SET Ban='false' WHERE email='$idpost' ";
-        pg_query($dbconn,$query);
-        header('location: Admin.php');
-    }
-
 ?>

@@ -17,12 +17,13 @@
 	<!-- Barra superiore-->
 	<header class="topnav">
 		<nav>	
-			<a class="titolo" href="index.php" ALT="EasyRail">Untuned</a>
+			<a class="titolo" href="indexs.php" ALT="EasyRail">Untuned</a>
 			<div class="log dropdown">
 				<button class="dropbtn">Accedi</button>
 				<div class="dropdown-content">
 					<a href="articoli.php">Articoli</a>
 					<a href="Login.html" class="center" >Login</a>
+					<a href="Register.html">Registrati</a>
 				</div>
 			</div>
 		</nav>
@@ -58,11 +59,11 @@
     // User log in request on button click
     const userLogInRequest = () => {
         let logInUri = 'https://accounts.spotify.com/authorize' +
-			'?client_id=<?php echo $__app_client_id; ?>' +
-			'&response_type=code' +
-			'&redirect_uri=<?php echo $__redirect_uri; ?>' +
-			'&scope=user-read-email user-read-private app-remote-control user-top-read user-read-currently-playing user-read-recently-played streaming user-read-playback-state user-modify-playback-state' +
-			'&show_dialog=true';
+            '?client_id=<?php echo $__app_client_id; ?>' +
+            '&response_type=code' +
+            '&redirect_uri=<?php echo $__redirect_uri; ?>' +
+            '&scope=app-remote-control user-top-read user-read-currently-playing user-read-recently-played streaming app-remote-control user-read-playback-state user-modify-playback-state' +
+            '&show_dialog=true';
         // Debug
         console.log(logInUri);
         
